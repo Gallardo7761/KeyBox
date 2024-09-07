@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS MasterKeys (
+    keyId INTEGER PRIMARY KEY AUTOINCREMENT,
+    keyName TEXT NOT NULL UNIQUE,
+    masterKey TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS Passwords (
+    passwordId INTEGER PRIMARY KEY AUTOINCREMENT,
+    keyId INTEGER NOT NULL,
+    userName TEXT NOT NULL,
+    website TEXT NOT NULL,
+    password TEXT NOT NULL,
+    FOREIGN KEY(keyId) REFERENCES MasterKeys(keyId)
+);
