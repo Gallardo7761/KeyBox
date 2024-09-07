@@ -3,6 +3,7 @@ package dev.gallardo.kb.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.File;
 
 public class Constants {
@@ -17,6 +18,8 @@ public class Constants {
     public static final String DEFAULT_SQL = "resources/default.sql";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Constants.APP_NAME);
+
+    public static final Color COLOR_PRIMARY = Color.decode("#2196F3");
 
     private Constants() {
         throw new AssertionError("Utility class cannot be instantiated.");

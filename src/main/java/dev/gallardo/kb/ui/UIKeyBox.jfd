@@ -12,6 +12,29 @@ new FormModel {
 			"$sizePolicy": 1
 			"defaultCloseOperation": 3
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/keybox_icon_64.png" )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar1"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "createBtn"
+					"preferredSize": new java.awt.Dimension( 32, 32 )
+					"minimumSize": new java.awt.Dimension( 32, 32 )
+					"maximumSize": new java.awt.Dimension( 32, 32 )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "editBtn"
+					"preferredSize": new java.awt.Dimension( 32, 32 )
+					"minimumSize": new java.awt.Dimension( 32, 32 )
+					"maximumSize": new java.awt.Dimension( 32, 32 )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "deleteBtn"
+					"preferredSize": new java.awt.Dimension( 32, 32 )
+					"minimumSize": new java.awt.Dimension( 32, 32 )
+					"maximumSize": new java.awt.Dimension( 32, 32 )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 900, 600 )
