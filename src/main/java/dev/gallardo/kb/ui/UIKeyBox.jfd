@@ -11,6 +11,7 @@ new FormModel {
 			name: "this"
 			"$sizePolicy": 1
 			"defaultCloseOperation": 3
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/keybox_icon_64.png" )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 900, 600 )

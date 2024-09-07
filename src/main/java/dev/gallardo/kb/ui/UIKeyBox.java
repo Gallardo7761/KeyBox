@@ -5,6 +5,9 @@
 package dev.gallardo.kb.ui;
 
 import javax.swing.*;
+
+import dev.gallardo.kb.util.Constants;
+import dev.gallardo.kb.util.UIUtil;
 import net.miginfocom.swing.*;
 
 /**
@@ -15,6 +18,7 @@ public class UIKeyBox extends JFrame {
 
     private UIKeyBox() {
         initComponents();
+        UIUtil.setTitle("KeyBox v" + Constants.APP_VERSION, this);
     }
 
     public static UIKeyBox getInstance() {
@@ -30,6 +34,7 @@ public class UIKeyBox extends JFrame {
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(new ImageIcon(getClass().getResource("/images/keybox_icon_64.png")).getImage());
         var contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
             "hidemode 3",
