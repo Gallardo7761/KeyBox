@@ -1,33 +1,54 @@
 package dev.gallardo.kb.common;
 
+import java.util.StringJoiner;
+
 public class PasswordEntry {
-    private String service;
-    private String username;
+    private Integer passwordId;
+    private String title;
+    private String userName;
+    private String url;
     private String password;
     private boolean passwordVisible;
 
-    public PasswordEntry(String service, String username, String password) {
-        this.service = service;
-        this.username = username;
+    public PasswordEntry(Integer passwordId, String title, String userName, String url, String password) {
+        this.passwordId = passwordId;
+        this.title = title;
+        this.userName = userName;
+        this.url = url;
         this.password = password;
         this.passwordVisible = false;  // Por defecto, la contraseña está oculta
     }
 
-    // Getters y setters
-    public String getService() {
-        return service;
+    public Integer getPasswordId() {
+        return passwordId;
     }
 
-    public void setService(String service) {
-        this.service = service;
+    public void setPasswordId(Integer passwordId) {
+        this.passwordId = passwordId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getTitle() {
+        return title;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getPassword() {
@@ -44,5 +65,31 @@ public class PasswordEntry {
 
     public void setPasswordVisible(boolean passwordVisible) {
         this.passwordVisible = passwordVisible;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PasswordEntry that = (PasswordEntry) o;
+        return passwordId.equals(that.passwordId);
+    }
+
+    @Override
+    public int hashCode() {
+        return passwordId.hashCode() * 31;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", PasswordEntry.class.getSimpleName() + "[", "]")
+                .add("passwordId=" + passwordId)
+                .add("title='" + title + "'")
+                .add("userName='" + userName + "'")
+                .add("website='" + url + "'")
+                .add("password='" + password + "'")
+                .add("passwordVisible=" + passwordVisible)
+                .toString();
     }
 }
