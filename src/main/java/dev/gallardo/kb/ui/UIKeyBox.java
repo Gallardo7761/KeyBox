@@ -6,11 +6,14 @@ package dev.gallardo.kb.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.EventObject;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import dev.gallardo.kb.ui.models.TablaModel;
+import dev.gallardo.kb.ui.themes.KBLaf;
 import dev.gallardo.kb.util.Constants;
 import dev.gallardo.kb.util.UIUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -30,10 +33,8 @@ public class UIKeyBox extends JFrame {
         IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
         UIUtil.setTitle("KeyBox v" + Constants.APP_VERSION, this);
         setupShortcuts();
-        tabla.getColumn("").setCellRenderer(new ButtonRenderer());
-        tabla.getColumn("").setCellEditor(new ButtonEditor(new JCheckBox()));
-        tabla.getColumnModel().getColumn(4).setMinWidth(32);
-        tabla.getColumnModel().getColumn(4).setMaxWidth(32);
+        tabla.getColumn("Contraseña").setCellRenderer(new PasswordRenderer());
+        tabla.getColumn("Contraseña").setCellEditor(new PasswordEditor());
     }
 
     public static UIKeyBox getInstance() {
@@ -183,73 +184,127 @@ public class UIKeyBox extends JFrame {
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
 
-class ButtonRenderer extends JButton implements TableCellRenderer {
+class PasswordRenderer extends JPanel implements TableCellRenderer {
 
-    public ButtonRenderer() {
-        setOpaque(true);
+    private JPasswordField passwordField;
+    private JToggleButton toggleButton;
+
+    public PasswordRenderer() {
+        setLayout(new BorderLayout());
+
+        passwordField = new JPasswordField();
+        passwordField.setBorder(null); // Quita el borde
+        passwordField.setOpaque(false); // Hace el fondo transparente
+        passwordField.setMargin(new Insets(0, 0, 0, 0)); // Quita el margen para que se ajuste al botón
+
+        toggleButton = new JToggleButton(
+                IconFontSwing.buildIcon(
+                        FontAwesome.EYE,
+                        16,
+                        KBLaf.LIGHT_BLUE
+                )
+        );
+
+        toggleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (toggleButton.isSelected()) {
+                    passwordField.setEchoChar((char) 0); // Mostrar la contraseña
+                    toggleButton.setText("Hide");
+                } else {
+                    passwordField.setEchoChar('*'); // Ocultar la contraseña
+                    toggleButton.setText("Show");
+                }
+            }
+        });
+
+        add(passwordField, BorderLayout.CENTER);
+        add(toggleButton, BorderLayout.EAST);
     }
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-                                                   boolean isSelected, boolean hasFocus, int row, int column) {
-        if (isSelected) {
-            setForeground(table.getSelectionForeground());
-            setBackground(table.getSelectionBackground());
-        } else {
-            setForeground(table.getForeground());
-            setBackground(UIManager.getColor("Button.background"));
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        if (value instanceof String) {
+            passwordField.setText((String) value);
         }
-        setText((value == null) ? "" : value.toString());
+
+        if (isSelected) {
+            setBackground(table.getSelectionBackground());
+            setForeground(table.getSelectionForeground());
+        } else {
+            setBackground(table.getBackground());
+            setForeground(table.getForeground());
+        }
+
         return this;
     }
 }
 
-class ButtonEditor extends DefaultCellEditor {
+class PasswordEditor extends AbstractCellEditor implements TableCellEditor {
 
-    protected JButton button;
-    private String label;
-    private boolean isPushed;
+    private JPasswordField passwordField;
+    private JToggleButton toggleButton;
+    private JPanel panel;
 
-    public ButtonEditor(JCheckBox checkBox) {
-        super(checkBox);
-        button = new JButton();
-        button.setOpaque(true);
-        button.addActionListener(new ActionListener() {
+    public PasswordEditor() {
+        passwordField = new JPasswordField();
+        passwordField.setBorder(null); // Quita el borde
+        passwordField.setOpaque(false); // Hace el fondo transparente
+        passwordField.setMargin(new Insets(0, 0, 0, 0)); // Quita el margen para que se ajuste al botón
+
+        toggleButton = new JToggleButton(
+                IconFontSwing.buildIcon(
+                        FontAwesome.EYE,
+                        16,
+                        KBLaf.LIGHT_BLUE
+                )
+        );
+        toggleButton.setBorder(null); // Quita el borde
+        toggleButton.setOpaque(false); // Hace el fondo transparente
+
+        toggleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fireEditingStopped();
+                if (toggleButton.isSelected()) {
+                    passwordField.setEchoChar((char) 0); // Mostrar la contraseña
+                    toggleButton.setText("Hide");
+                } else {
+                    passwordField.setEchoChar('*'); // Ocultar la contraseña
+                    toggleButton.setText("Show");
+                }
             }
         });
-    }
 
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value,
-                                                 boolean isSelected, int row, int column) {
-        if (isSelected) {
-            button.setForeground(table.getSelectionForeground());
-            button.setBackground(table.getSelectionBackground());
-        } else {
-            button.setForeground(table.getForeground());
-            button.setBackground(table.getBackground());
-        }
-        label = (value == null) ? "" : value.toString();
-        button.setText(label);
-        isPushed = true;
-        return button;
+        panel = new JPanel(new BorderLayout());
+        panel.add(passwordField, BorderLayout.CENTER);
+        panel.add(toggleButton, BorderLayout.EAST);
+
+        panel.setPreferredSize(new Dimension(200, 25));
     }
 
     @Override
     public Object getCellEditorValue() {
-        if (isPushed) {
-            JOptionPane.showMessageDialog(button, label + ": Ouch!");
+        return new String(passwordField.getPassword());
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        if (value instanceof String) {
+            passwordField.setText((String) value);
         }
-        isPushed = false;
-        return label;
+        toggleButton.setText(toggleButton.isSelected() ? "Hide" : "Show");
+
+        return panel; // Devuelve el panel completo, no solo el JPasswordField
     }
 
     @Override
     public boolean stopCellEditing() {
-        isPushed = false;
-        return super.stopCellEditing();
+        fireEditingStopped();
+        return true;
+    }
+
+    @Override
+    public boolean shouldSelectCell(EventObject anEvent) {
+        return true;
     }
 }

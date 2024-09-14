@@ -28,13 +28,13 @@ public class DBUtil {
     public static void setup() {
         try (Connection conn = DriverManager.getConnection(DB_URL)) {
             LOGGER.info("Creando la base de datos...");
-            executeSqlScript(conn);
+            defaultSQLScript(conn);
         } catch (Exception e) {
             LOGGER.error("Error al crear la base de datos.", e);
         }
     }
 
-    private static void executeSqlScript(Connection conn) throws IOException, java.sql.SQLException {
+    private static void defaultSQLScript(Connection conn) throws IOException, java.sql.SQLException {
         try (InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream("default.sql")) {
 
             assert inputStream != null;

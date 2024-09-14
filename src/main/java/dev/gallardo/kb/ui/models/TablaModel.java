@@ -1,5 +1,6 @@
 package dev.gallardo.kb.ui.models;
 
+import dev.gallardo.kb.common.KBDBAccessor;
 import dev.gallardo.kb.common.PasswordEntry;
 import dev.gallardo.kb.util.Constants;
 
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TablaModel extends AbstractTableModel {
-    private List<PasswordEntry> passwordEntries;
-    private String[] columnNames = {"Título", "Usuario", "Url", "Contraseña", ""};
+    private List<PasswordEntry> passwordEntries = KBDBAccessor.fetchDataFromDB();
+    private final String[] columnNames = {"Título", "Usuario", "Url", "Contraseña"};
 
     public TablaModel() {
         passwordEntries = new ArrayList<>();
-        fetchDataFromDB();
+        passwordEntries = KBDBAccessor.fetchDataFromDB();
     }
 
     @Override
@@ -58,43 +59,9 @@ public class TablaModel extends AbstractTableModel {
         return passwordEntries.get(rowIndex);
     }
 
-    private void fetchDataFromDB() {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = DriverManager.getConnection(Constants.DB_URL);
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT passwordId, title, userName, url, password FROM Passwords");
-
-            while (resultSet.next()) {
-                PasswordEntry entry = new PasswordEntry(
-                        resultSet.getInt("passwordId"),
-                        resultSet.getString("title"),
-                        resultSet.getString("userName"),
-                        resultSet.getString("url"),
-                        resultSet.getString("password")
-                );
-                passwordEntries.add(entry);
-            }
-
-        } catch (SQLException e) {
-            Constants.LOGGER.error("Error al obtener datos de la base de datos.", e);
-        } finally {
-            try {
-                if (resultSet != null) resultSet.close();
-                if (statement != null) statement.close();
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                Constants.LOGGER.error("Error al cerrar la conexión a la base de datos.", e);
-            }
-        }
-    }
-
     public void refreshData() {
         passwordEntries.clear();
-        fetchDataFromDB();
+        passwordEntries = KBDBAccessor.fetchDataFromDB();
         fireTableDataChanged();
     }
 }
