@@ -2,6 +2,7 @@ package dev.gallardo.kb.common;
 
 import java.util.StringJoiner;
 
+@SuppressWarnings("unused")
 public class PasswordEntry {
     private Integer passwordId;
     private String title;

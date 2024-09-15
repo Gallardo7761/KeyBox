@@ -17,6 +17,7 @@ import net.miginfocom.swing.*;
 /**
  * @author jomaa
  */
+@SuppressWarnings("ALL")
 public class PasswordForm extends JDialog {
     private PasswordEntry passwordEntry;
     private boolean accepted = false;

@@ -11,6 +11,7 @@ import javax.swing.*;
 /**
  * @author jomaa
  */
+@SuppressWarnings("ALL")
 public class ContextMenu extends JPopupMenu {
     private static ContextMenu instance = null;
 

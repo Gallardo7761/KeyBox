@@ -14,6 +14,7 @@ import net.miginfocom.swing.*;
 /**
  * @author jomaa
  */
+@SuppressWarnings("ALL")
 public class PasswordInput extends JDialog {
     private String password;
 

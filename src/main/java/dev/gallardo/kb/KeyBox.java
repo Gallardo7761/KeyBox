@@ -73,6 +73,7 @@ public class KeyBox {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void handleFiles() {
         if(!new File(Constants.DB_FILE_PATH).exists()) {
             DBUtil.createFile();

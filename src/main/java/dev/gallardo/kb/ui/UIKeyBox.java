@@ -28,6 +28,7 @@ import net.miginfocom.swing.*;
 /**
  * @author jomaa
  */
+@SuppressWarnings("ALL")
 public class UIKeyBox extends JFrame implements DBChangeListener {
     private static UIKeyBox instance = null;
     private final TablaModel tablaModel = new TablaModel();
@@ -139,7 +140,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             UIUtil.showInfoDialog(decryptedPassword);
         } catch (Exception ex) {
             UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
-            ex.printStackTrace();
+            Constants.LOGGER.error("Error al descifrar la contraseña.", ex);
         }
     }
 
