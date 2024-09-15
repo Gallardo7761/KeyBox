@@ -5,6 +5,7 @@
 package dev.gallardo.kb.ui;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -37,33 +38,39 @@ public class ContextMenu extends JPopupMenu {
         //======== this ========
 
         //---- createItem ----
-        createItem.setText("Nuevo (Ctrl + N)");
+        createItem.setText("Nuevo");
         createItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        createItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
         add(createItem);
 
         //---- editItem ----
-        editItem.setText("Editar (Ctrl + E)");
+        editItem.setText("Editar");
         editItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        editItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
         add(editItem);
 
         //---- deleteItem ----
-        deleteItem.setText("Eliminar (Ctrl + D)");
+        deleteItem.setText("Eliminar");
         deleteItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
         add(deleteItem);
 
         //---- showItem ----
-        showItem.setText("Mostrar (Ctrl + S)");
+        showItem.setText("Mostrar");
         showItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        showItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
         add(showItem);
 
         //---- copyUserItem ----
-        copyUserItem.setText("Copiar usuario (Ctrl + U)");
+        copyUserItem.setText("Copiar usuario");
         copyUserItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        copyUserItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_DOWN_MASK));
         add(copyUserItem);
 
         //---- copyPasswordItem ----
-        copyPasswordItem.setText("Copiar contrase\u00f1a (Ctrl + C)");
+        copyPasswordItem.setText("Copiar contrase\u00f1a");
         copyPasswordItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        copyPasswordItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
         add(copyPasswordItem);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }

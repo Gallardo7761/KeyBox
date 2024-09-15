@@ -19,4 +19,8 @@ public class UIUtil {
     public static boolean showConfirmDialog(String s) {
         return JOptionPane.showConfirmDialog(null, s, "Confirmación", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
+
+    public static void showInfoDialog(String s) {
+        JOptionPane.showMessageDialog(null, s, "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
 }

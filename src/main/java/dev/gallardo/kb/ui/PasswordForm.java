@@ -9,6 +9,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import dev.gallardo.kb.common.PasswordEntry;
+import dev.gallardo.kb.ui.themes.KBLaf;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import net.miginfocom.swing.*;
 
 /**
@@ -27,6 +30,12 @@ public class PasswordForm extends JDialog {
         super(parent, "Editar entrada", true);
         this.passwordEntry = passwordEntry;
         initComponents();
+
+        titleLabel.setIcon(IconFontSwing.buildIcon(FontAwesome.PARAGRAPH, 16, KBLaf.LIGHT_BLUE));
+        userNameLabel.setIcon(IconFontSwing.buildIcon(FontAwesome.USER, 16, KBLaf.LIGHT_BLUE));
+        urlLabel.setIcon(IconFontSwing.buildIcon(FontAwesome.LINK, 16, KBLaf.LIGHT_BLUE));
+        passwordLabel.setIcon(IconFontSwing.buildIcon(FontAwesome.KEY, 16, KBLaf.LIGHT_BLUE));
+
         titleField.setText(passwordEntry.getTitle());
         userNameField.setText(passwordEntry.getUserName());
         urlField.setText(passwordEntry.getUrl());
@@ -70,7 +79,7 @@ public class PasswordForm extends JDialog {
         contentPane.setLayout(new MigLayout(
             "filly,hidemode 3,gapy 18",
             // columns
-            "[fill]" +
+            "[fill]unrel" +
             "[grow,fill]",
             // rows
             "rel[fill]rel" +
@@ -80,7 +89,7 @@ public class PasswordForm extends JDialog {
             "[fill]"));
 
         //---- titleLabel ----
-        titleLabel.setText("T\u00edtulo:");
+        titleLabel.setText("T\u00edtulo");
         titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         contentPane.add(titleLabel, "cell 0 0,growy");
 
@@ -91,7 +100,7 @@ public class PasswordForm extends JDialog {
         contentPane.add(titleField, "cell 1 0");
 
         //---- userNameLabel ----
-        userNameLabel.setText("Usuario:");
+        userNameLabel.setText("Usuario");
         userNameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         contentPane.add(userNameLabel, "cell 0 1,growy");
 
@@ -102,7 +111,7 @@ public class PasswordForm extends JDialog {
         contentPane.add(userNameField, "cell 1 1");
 
         //---- urlLabel ----
-        urlLabel.setText("URL:");
+        urlLabel.setText("URL");
         urlLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         contentPane.add(urlLabel, "cell 0 2,growy");
 
@@ -113,7 +122,7 @@ public class PasswordForm extends JDialog {
         contentPane.add(urlField, "cell 1 2");
 
         //---- passwordLabel ----
-        passwordLabel.setText("Contrase\u00f1a:");
+        passwordLabel.setText("Contrase\u00f1a");
         passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         contentPane.add(passwordLabel, "cell 0 3,growy");
 
@@ -128,7 +137,7 @@ public class PasswordForm extends JDialog {
         okBtn.setFocusable(false);
         okBtn.addActionListener(e -> okBtn(e));
         contentPane.add(okBtn, "cell 1 4,alignx right,growx 0");
-        setSize(310, 230);
+        setSize(350, 230);
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }

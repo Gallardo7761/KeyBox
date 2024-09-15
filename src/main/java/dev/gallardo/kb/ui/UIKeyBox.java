@@ -7,7 +7,8 @@ package dev.gallardo.kb.ui;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
-import java.util.EventObject;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.TableCellEditor;
@@ -37,13 +38,16 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
     private UIKeyBox() {
         initComponents();
         kbdbAccessor.addDBChangeListener(this);
-        IconFontSwing.register(FontAwesome.getIconFont());
-        IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
+
         UIUtil.setTitle("KeyBox v" + Constants.APP_VERSION, this);
-        setupShortcuts();
-        setCellRenderers();
         contextMenu = ContextMenu.getInstance();
         addContextMenuListeners();
+
+        IconFontSwing.register(FontAwesome.getIconFont());
+        IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
+        setIcons();
+
+        setupShortcuts();
     }
 
     public static UIKeyBox getInstance() {
@@ -81,15 +85,50 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
     }
 
     private void deleteBtn(ActionEvent e) {
+        int[] selectedRows = tabla.getSelectedRows();
+        if (selectedRows.length == 0) {
+            return;
+        }
+
+        List<PasswordEntry> passwordEntries = Arrays.stream(selectedRows)
+            .mapToObj(tablaModel::getPasswordEntryAt)
+            .toList();
+
+        if(UIUtil.showConfirmDialog("¿Estás seguro de que deseas eliminar esta/s entrada/s?")) {
+            passwordEntries.forEach(kbdbAccessor::delete);
+        }
+    }
+
+    private void copyPassword() {
         int selectedRow = tabla.getSelectedRow();
         if (selectedRow == -1) {
             return;
         }
 
         PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
-        if(UIUtil.showConfirmDialog("¿Estás seguro de que deseas eliminar esta entrada?")) {
-            kbdbAccessor.delete(passwordEntry);
+        StringSelection stringSelection = new StringSelection(passwordEntry.getPassword());
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+    }
+
+    private void copyUser() {
+        int selectedRow = tabla.getSelectedRow();
+        if (selectedRow == -1) {
+            return;
         }
+
+        PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
+        StringSelection stringSelection = new StringSelection(passwordEntry.getUserName());
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+    }
+
+    private void showPassword() {
+        int selectedRow = tabla.getSelectedRow();
+        if (selectedRow == -1) {
+            return;
+        }
+
+        PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
+        UIUtil.showInfoDialog("Contraseña: " + passwordEntry.getPassword());
     }
 
     @Override
@@ -133,15 +172,25 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         getRootPane().getActionMap().put("deleteAction", deleteAction);
     }
 
-    private void setCellRenderers() {
-        tabla.getColumn("Contraseña").setCellRenderer(new PasswordRenderer());
-        tabla.getColumn("Contraseña").setCellEditor(new PasswordEditor());
+    private void setIcons() {
+        createBtn.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 16, KBLaf.LIGHT_BLUE));
+        editBtn.setIcon(IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, KBLaf.LIGHT_BLUE));
+        deleteBtn.setIcon(IconFontSwing.buildIcon(FontAwesome.TRASH, 16, KBLaf.LIGHT_BLUE));
+        contextMenu.createItem.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 16, KBLaf.LIGHT_BLUE));
+        contextMenu.editItem.setIcon(IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, KBLaf.LIGHT_BLUE));
+        contextMenu.deleteItem.setIcon(IconFontSwing.buildIcon(FontAwesome.TRASH, 16, KBLaf.LIGHT_BLUE));
+        contextMenu.showItem.setIcon(IconFontSwing.buildIcon(FontAwesome.EYE, 16, KBLaf.LIGHT_BLUE));
+        contextMenu.copyUserItem.setIcon(IconFontSwing.buildIcon(FontAwesome.USER, 16, KBLaf.LIGHT_BLUE));
+        contextMenu.copyPasswordItem.setIcon(IconFontSwing.buildIcon(FontAwesome.KEY, 16, KBLaf.LIGHT_BLUE));
     }
 
     private void addContextMenuListeners() {
         contextMenu.createItem.addActionListener(this::createBtn);
         contextMenu.editItem.addActionListener(this::editBtn);
         contextMenu.deleteItem.addActionListener(this::deleteBtn);
+        contextMenu.showItem.addActionListener(e -> showPassword());
+        contextMenu.copyUserItem.addActionListener(e -> copyUser());
+        contextMenu.copyPasswordItem.addActionListener(e -> copyPassword());
     }
 
     private void tablaMouseClicked(MouseEvent e) {
@@ -201,10 +250,10 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             createBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             createBtn.setBorder(new EmptyBorder(1, 1, 1, 1));
             createBtn.setBackground(new Color(0x222436));
+            createBtn.setToolTipText("Ctrl + N");
             createBtn.setMaximumSize(new Dimension(64, 24));
             createBtn.setMinimumSize(new Dimension(64, 24));
             createBtn.setPreferredSize(new Dimension(64, 24));
-            createBtn.setToolTipText("Ctrl + N");
             createBtn.addActionListener(e -> createBtn(e));
             menuBar.add(createBtn);
 
@@ -213,10 +262,10 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             editBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             editBtn.setBorder(new EmptyBorder(1, 1, 1, 1));
             editBtn.setBackground(new Color(0x222436));
+            editBtn.setToolTipText("Ctrl + E");
             editBtn.setMaximumSize(new Dimension(64, 24));
             editBtn.setMinimumSize(new Dimension(64, 24));
             editBtn.setPreferredSize(new Dimension(64, 24));
-            editBtn.setToolTipText("Ctrl + E");
             editBtn.addActionListener(e -> editBtn(e));
             menuBar.add(editBtn);
 
@@ -225,10 +274,10 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             deleteBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             deleteBtn.setBorder(new EmptyBorder(1, 1, 1, 1));
             deleteBtn.setBackground(new Color(0x222436));
-            deleteBtn.setMaximumSize(new Dimension(64, 24));
-            deleteBtn.setMinimumSize(new Dimension(64, 24));
-            deleteBtn.setPreferredSize(new Dimension(64, 24));
             deleteBtn.setToolTipText("Ctrl + D");
+            deleteBtn.setMaximumSize(new Dimension(72, 24));
+            deleteBtn.setMinimumSize(new Dimension(72, 24));
+            deleteBtn.setPreferredSize(new Dimension(72, 24));
             deleteBtn.addActionListener(e -> deleteBtn(e));
             menuBar.add(deleteBtn);
         }
@@ -272,129 +321,4 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
     private JScrollPane tablaScrollPane;
     private JTable tabla;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
-}
-
-class PasswordRenderer extends JPanel implements TableCellRenderer {
-
-    private JPasswordField passwordField;
-    private JToggleButton toggleButton;
-
-    public PasswordRenderer() {
-        setLayout(new BorderLayout());
-
-        passwordField = new JPasswordField();
-        passwordField.setBorder(null); // Quita el borde
-        passwordField.setOpaque(false); // Hace el fondo transparente
-        passwordField.setMargin(new Insets(0, 0, 0, 0)); // Quita el margen para que se ajuste al botón
-
-        toggleButton = new JToggleButton(
-                IconFontSwing.buildIcon(
-                        FontAwesome.EYE,
-                        16,
-                        KBLaf.LIGHT_BLUE
-                )
-        );
-
-        toggleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (toggleButton.isSelected()) {
-                    passwordField.setEchoChar((char) 0); // Mostrar la contraseña
-                    toggleButton.setText("Hide");
-                } else {
-                    passwordField.setEchoChar('*'); // Ocultar la contraseña
-                    toggleButton.setText("Show");
-                }
-            }
-        });
-
-        add(passwordField, BorderLayout.CENTER);
-        add(toggleButton, BorderLayout.EAST);
-    }
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        if (value instanceof String) {
-            passwordField.setText((String) value);
-        }
-
-        if (isSelected) {
-            setBackground(table.getSelectionBackground());
-            setForeground(table.getSelectionForeground());
-        } else {
-            setBackground(table.getBackground());
-            setForeground(table.getForeground());
-        }
-
-        return this;
-    }
-}
-
-class PasswordEditor extends AbstractCellEditor implements TableCellEditor {
-
-    private JPasswordField passwordField;
-    private JToggleButton toggleButton;
-    private JPanel panel;
-
-    public PasswordEditor() {
-        passwordField = new JPasswordField();
-        passwordField.setBorder(null); // Quita el borde
-        passwordField.setOpaque(false); // Hace el fondo transparente
-        passwordField.setMargin(new Insets(0, 0, 0, 0)); // Quita el margen para que se ajuste al botón
-
-        toggleButton = new JToggleButton(
-                IconFontSwing.buildIcon(
-                        FontAwesome.EYE,
-                        16,
-                        KBLaf.LIGHT_BLUE
-                )
-        );
-        toggleButton.setBorder(null); // Quita el borde
-        toggleButton.setOpaque(false); // Hace el fondo transparente
-
-        toggleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (toggleButton.isSelected()) {
-                    passwordField.setEchoChar((char) 0); // Mostrar la contraseña
-                    toggleButton.setText("Hide");
-                } else {
-                    passwordField.setEchoChar('*'); // Ocultar la contraseña
-                    toggleButton.setText("Show");
-                }
-            }
-        });
-
-        panel = new JPanel(new BorderLayout());
-        panel.add(passwordField, BorderLayout.CENTER);
-        panel.add(toggleButton, BorderLayout.EAST);
-
-        panel.setPreferredSize(new Dimension(200, 25));
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return new String(passwordField.getPassword());
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        if (value instanceof String) {
-            passwordField.setText((String) value);
-        }
-        toggleButton.setText(toggleButton.isSelected() ? "Hide" : "Show");
-
-        return panel;
-    }
-
-    @Override
-    public boolean stopCellEditing() {
-        fireEditingStopped();
-        return true;
-    }
-
-    @Override
-    public boolean shouldSelectCell(EventObject anEvent) {
-        return true;
-    }
 }

@@ -10,33 +10,39 @@ new FormModel {
 			name: "this"
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "createItem"
-				"text": "Nuevo (Ctrl + N)"
+				"text": "Nuevo"
 				"font": &Font0 new java.awt.Font( "Segoe UI", 0, 14 )
+				"accelerator": static javax.swing.KeyStroke getKeyStroke( 78, 130, false )
 			} )
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "editItem"
-				"text": "Editar (Ctrl + E)"
+				"text": "Editar"
 				"font": #Font0
+				"accelerator": static javax.swing.KeyStroke getKeyStroke( 69, 130, false )
 			} )
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "deleteItem"
-				"text": "Eliminar (Ctrl + D)"
+				"text": "Eliminar"
 				"font": #Font0
+				"accelerator": static javax.swing.KeyStroke getKeyStroke( 68, 130, false )
 			} )
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "showItem"
-				"text": "Mostrar (Ctrl + S)"
+				"text": "Mostrar"
 				"font": #Font0
+				"accelerator": static javax.swing.KeyStroke getKeyStroke( 83, 130, false )
 			} )
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "copyUserItem"
-				"text": "Copiar usuario (Ctrl + U)"
+				"text": "Copiar usuario"
 				"font": #Font0
+				"accelerator": static javax.swing.KeyStroke getKeyStroke( 85, 130, false )
 			} )
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "copyPasswordItem"
-				"text": "Copiar contraseña (Ctrl + C)"
+				"text": "Copiar contraseña"
 				"font": #Font0
+				"accelerator": static javax.swing.KeyStroke getKeyStroke( 67, 130, false )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
