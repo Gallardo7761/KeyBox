@@ -73,12 +73,17 @@ public class PasswordEntry {
         if (o == null || getClass() != o.getClass()) return false;
 
         PasswordEntry that = (PasswordEntry) o;
-        return passwordId.equals(that.passwordId);
+        return passwordId.equals(that.passwordId) && title.equals(that.title) && userName.equals(that.userName) && url.equals(that.url) && password.equals(that.password);
     }
 
     @Override
     public int hashCode() {
-        return passwordId.hashCode() * 31;
+        int result = passwordId.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + userName.hashCode();
+        result = 31 * result + url.hashCode();
+        result = 31 * result + password.hashCode();
+        return result;
     }
 
     @Override

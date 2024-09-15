@@ -1,6 +1,6 @@
 package dev.gallardo.kb;
 
-import dev.gallardo.kb.ui.KeyInputDialog;
+import dev.gallardo.kb.ui.PasswordInput;
 import dev.gallardo.kb.ui.UIKeyBox;
 import dev.gallardo.kb.ui.themes.KBLaf;
 import dev.gallardo.kb.util.Constants;
@@ -28,7 +28,7 @@ public class KeyBox {
         if(isFirstRun()) {
             handleFiles();
 
-            String password = KeyInputDialog.promptForKeyStorePassword();
+            String password = PasswordInput.promptForKeyStorePassword();
             if (password == null || password.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No se proporcionó una contraseña. La aplicación se cerrará.");
                 System.exit(1);
@@ -48,7 +48,7 @@ public class KeyBox {
             }
         }
 
-        masterPassword = KeyInputDialog.promptForKeyStorePassword();
+        masterPassword = PasswordInput.promptForKeyStorePassword();
         if (masterPassword == null || masterPassword.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No se proporcionó una contraseña. La aplicación se cerrará.", "Error", JOptionPane.ERROR_MESSAGE);
             Constants.LOGGER.error("No se proporcionó una contraseña. La aplicación se cerrará. (Exit Code 1)");

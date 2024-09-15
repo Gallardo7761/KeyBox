@@ -94,20 +94,17 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
         try {
             String encryptedPassword = passwordEntry.getPassword();
-            System.out.println("Texto cifrado para edición: " + encryptedPassword);
             String decryptedPassword = encryptionService.decryptPassword(encryptedPassword);
-            System.out.println("Contraseña desencriptada: " + decryptedPassword);
             passwordEntry.setPassword(decryptedPassword);
         } catch (Exception ex) {
             UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
-            ex.printStackTrace();
             return;
         }
 
         PasswordForm passwordForm = new PasswordForm(this, passwordEntry);
         passwordForm.setVisible(true);
-
         PasswordEntry editedPasswordEntry = passwordForm.getPasswordEntry();
+
         if (editedPasswordEntry != null) {
             PasswordEntryValidator validator = new PasswordEntryValidator(passwordEntry);
             if (!validator.validate()) {
@@ -117,12 +114,14 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             editedPasswordEntry.setPasswordId(passwordEntry.getPasswordId());
             try {
                 String encryptedEditedPassword = encryptionService.encryptPassword(editedPasswordEntry.getPassword());
-                System.out.println("Contraseña cifrada para guardar: " + encryptedEditedPassword);
                 editedPasswordEntry.setPassword(encryptedEditedPassword);
+                if(editedPasswordEntry.equals(passwordEntry)) {
+                    Constants.LOGGER.info("No se realizaron cambios en la entrada.");
+                    return;
+                }
                 kbdbAccessor.edit(editedPasswordEntry);
             } catch (Exception ex) {
                 UIUtil.showErrorDialog("Error al cifrar la contraseña.", true);
-                ex.printStackTrace();
             }
         }
     }
