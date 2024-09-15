@@ -8,7 +8,6 @@ public class PasswordEntryValidator {
     private final PasswordEntry passwordEntry;
     private final List<String> errorMessages;
 
-    private static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
     private static final String URL_REGEX = "^(http|https)://.*$";
 
     public PasswordEntryValidator(PasswordEntry passwordEntry) {
@@ -22,7 +21,6 @@ public class PasswordEntryValidator {
         validateTitle();
         validateUserName();
         validateUrl();
-        validatePassword();
 
         return errorMessages.isEmpty();
     }
@@ -44,14 +42,6 @@ public class PasswordEntryValidator {
             errorMessages.add("La URL no puede estar vacía.");
         } else if (!passwordEntry.getUrl().matches(URL_REGEX)) {
             errorMessages.add("La URL debe comenzar con http:// o https://.");
-        }
-    }
-
-    private void validatePassword() {
-        if (passwordEntry.getPassword() == null || passwordEntry.getPassword().isEmpty()) {
-            errorMessages.add("La contraseña no puede estar vacía.");
-        } else if (!passwordEntry.getPassword().matches(PASSWORD_REGEX)) {
-            errorMessages.add("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.");
         }
     }
 

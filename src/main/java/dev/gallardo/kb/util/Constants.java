@@ -17,6 +17,10 @@ public class Constants {
     public static final String DB_URL = "jdbc:sqlite:" + DB_FILE_PATH;
     public static final String DEFAULT_SQL = "resources/default.sql";
 
+    public static final String KEYSTORE_KEY_ALIAS = "KBKey";
+    public static final String KEYSTORE_FILE_NAME = "kbkeys.jks";
+    public static final String KEYSTORE_FILE = APP_DIR + File.separator + KEYSTORE_FILE_NAME;
+
     public static final Logger LOGGER = LoggerFactory.getLogger(Constants.APP_NAME);
 
     private Constants() {

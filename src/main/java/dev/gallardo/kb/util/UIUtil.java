@@ -25,6 +25,17 @@ public class UIUtil {
         JOptionPane.showMessageDialog(null, s, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void showErrorDialog(String errorMessage) {
+        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showErrorDialog(String errorMessage, boolean withSound) {
+        if (withSound) {
+            Toolkit.getDefaultToolkit().beep();
+        }
+        showErrorDialog(errorMessage);
+    }
+
     public static void showErrorDialog(List<String> errorMessages) {
         StringBuilder sb = new StringBuilder();
         for (String errorMessage : errorMessages) {
