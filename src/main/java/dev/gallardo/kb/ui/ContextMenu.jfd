@@ -1,0 +1,46 @@
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.11" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableModifiers": 4
+		}
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "createItem"
+				"text": "Nuevo (Ctrl + N)"
+				"font": &Font0 new java.awt.Font( "Segoe UI", 0, 14 )
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "editItem"
+				"text": "Editar (Ctrl + E)"
+				"font": #Font0
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "deleteItem"
+				"text": "Eliminar (Ctrl + D)"
+				"font": #Font0
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "showItem"
+				"text": "Mostrar (Ctrl + S)"
+				"font": #Font0
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyUserItem"
+				"text": "Copiar usuario (Ctrl + U)"
+				"font": #Font0
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyPasswordItem"
+				"text": "Copiar contraseña (Ctrl + C)"
+				"font": #Font0
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 215, 165 )
+		} )
+	}
+}

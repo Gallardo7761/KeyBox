@@ -15,4 +15,8 @@ public class UIUtil {
         Icon icon = IconFontSwing.buildIcon(iconCode, size, color);
         button.setIcon(icon);
     }
+
+    public static boolean showConfirmDialog(String s) {
+        return JOptionPane.showConfirmDialog(null, s, "Confirmación", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+    }
 }

@@ -5,6 +5,7 @@
 package dev.gallardo.kb.ui;
 
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.util.EventObject;
 import javax.swing.*;
@@ -12,6 +13,9 @@ import javax.swing.border.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import dev.gallardo.kb.common.DBChangeListener;
+import dev.gallardo.kb.common.KBDBAccessor;
+import dev.gallardo.kb.common.PasswordEntry;
 import dev.gallardo.kb.ui.models.TablaModel;
 import dev.gallardo.kb.ui.themes.KBLaf;
 import dev.gallardo.kb.util.Constants;
@@ -24,17 +28,22 @@ import net.miginfocom.swing.*;
 /**
  * @author jomaa
  */
-public class UIKeyBox extends JFrame {
+public class UIKeyBox extends JFrame implements DBChangeListener {
     private static UIKeyBox instance = null;
+    private final TablaModel tablaModel = new TablaModel();
+    private final KBDBAccessor kbdbAccessor = KBDBAccessor.getInstance();
+    private final ContextMenu contextMenu;
 
     private UIKeyBox() {
         initComponents();
+        kbdbAccessor.addDBChangeListener(this);
         IconFontSwing.register(FontAwesome.getIconFont());
         IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
         UIUtil.setTitle("KeyBox v" + Constants.APP_VERSION, this);
         setupShortcuts();
-        tabla.getColumn("Contraseña").setCellRenderer(new PasswordRenderer());
-        tabla.getColumn("Contraseña").setCellEditor(new PasswordEditor());
+        setCellRenderers();
+        contextMenu = ContextMenu.getInstance();
+        addContextMenuListeners();
     }
 
     public static UIKeyBox getInstance() {
@@ -45,15 +54,48 @@ public class UIKeyBox extends JFrame {
     }
 
     private void createBtn(ActionEvent e) {
+        PasswordForm passwordForm = new PasswordForm(this);
+        passwordForm.setVisible(true);
 
+        PasswordEntry passwordEntry = passwordForm.getPasswordEntry();
+        if (passwordEntry != null) {
+            kbdbAccessor.create(passwordEntry);
+        }
     }
 
     private void editBtn(ActionEvent e) {
+        int selectedRow = tabla.getSelectedRow();
+        if (selectedRow == -1) {
+            return;
+        }
 
+        PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
+        PasswordForm passwordForm = new PasswordForm(this, passwordEntry);
+        passwordForm.setVisible(true);
+
+        PasswordEntry editedPasswordEntry = passwordForm.getPasswordEntry();
+        if (editedPasswordEntry != null) {
+            editedPasswordEntry.setPasswordId(passwordEntry.getPasswordId());
+            kbdbAccessor.edit(editedPasswordEntry);
+        }
     }
 
     private void deleteBtn(ActionEvent e) {
+        int selectedRow = tabla.getSelectedRow();
+        if (selectedRow == -1) {
+            return;
+        }
 
+        PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
+        if(UIUtil.showConfirmDialog("¿Estás seguro de que deseas eliminar esta entrada?")) {
+            kbdbAccessor.delete(passwordEntry);
+        }
+    }
+
+    @Override
+    public void onDBChanged() {
+        tablaModel.refreshData();
+        tabla.repaint();
     }
 
     private void setupShortcuts() {
@@ -91,6 +133,41 @@ public class UIKeyBox extends JFrame {
         getRootPane().getActionMap().put("deleteAction", deleteAction);
     }
 
+    private void setCellRenderers() {
+        tabla.getColumn("Contraseña").setCellRenderer(new PasswordRenderer());
+        tabla.getColumn("Contraseña").setCellEditor(new PasswordEditor());
+    }
+
+    private void addContextMenuListeners() {
+        contextMenu.createItem.addActionListener(this::createBtn);
+        contextMenu.editItem.addActionListener(this::editBtn);
+        contextMenu.deleteItem.addActionListener(this::deleteBtn);
+    }
+
+    private void tablaMouseClicked(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3) {
+            contextMenu.createItem.setVisible(false);
+            contextMenu.editItem.setVisible(true);
+            contextMenu.deleteItem.setVisible(true);
+            contextMenu.showItem.setVisible(true);
+            contextMenu.copyUserItem.setVisible(true);
+            contextMenu.copyPasswordItem.setVisible(true);
+            contextMenu.show(tabla, e.getX(), e.getY());
+        }
+    }
+
+    private void tablaScrollPaneMouseClicked(MouseEvent e) {
+        if(e.getButton() == MouseEvent.BUTTON3) {
+            contextMenu.createItem.setVisible(true);
+            contextMenu.editItem.setVisible(false);
+            contextMenu.deleteItem.setVisible(false);
+            contextMenu.showItem.setVisible(false);
+            contextMenu.copyUserItem.setVisible(false);
+            contextMenu.copyPasswordItem.setVisible(false);
+            contextMenu.show(tablaScrollPane, e.getX(), e.getY());
+        }
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Educational license - José Manuel Amador Gallardo (José Manuel Amador)
@@ -99,13 +176,14 @@ public class UIKeyBox extends JFrame {
         editBtn = new JButton();
         deleteBtn = new JButton();
         tablaScrollPane = new JScrollPane();
-        TablaModel model = new TablaModel();
-        tabla = new JTable(model);
+        tabla = new JTable(tablaModel);
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setIconImage(new ImageIcon(getClass().getResource("/images/keybox_icon_64.png")).getImage());
         setForeground(new Color(0xc8d3f5));
+        setPreferredSize(new Dimension(900, 600));
+        setMinimumSize(new Dimension(600, 300));
         var contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
             "insets 0,hidemode 3,gapy 0",
@@ -160,11 +238,23 @@ public class UIKeyBox extends JFrame {
         {
             tablaScrollPane.setFocusable(false);
             tablaScrollPane.setBorder(BorderFactory.createEmptyBorder());
+            tablaScrollPane.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    tablaScrollPaneMouseClicked(e);
+                }
+            });
 
             //---- tabla ----
             tabla.setFocusable(false);
             tabla.setFont(new Font("Segoe UI", Font.PLAIN, 16));
             tabla.setBorder(BorderFactory.createEmptyBorder());
+            tabla.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    tablaMouseClicked(e);
+                }
+            });
             tablaScrollPane.setViewportView(tabla);
         }
         contentPane.add(tablaScrollPane, "cell 0 0,gapy 0");
@@ -294,7 +384,7 @@ class PasswordEditor extends AbstractCellEditor implements TableCellEditor {
         }
         toggleButton.setText(toggleButton.isSelected() ? "Hide" : "Show");
 
-        return panel; // Devuelve el panel completo, no solo el JPasswordField
+        return panel;
     }
 
     @Override

@@ -12,7 +12,7 @@ public class KBLaf extends FlatMoonlightIJTheme {
     public static final Color DARK_BLUE = Color.decode("#222436");
     public static final Color LIGHT_BLUE = Color.decode("#c8d3f5");
     public static final Font TABLE_FONT = new Font("Segoe UI", Font.PLAIN, 14);
-    public static final Font TABLE_HEADER_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+    public static final Font TABLE_HEADER_FONT = new Font("Segoe UI", Font.PLAIN, 16);
 
     public static boolean setup() {
         UIManager.put("TitlePane.foreground", LIGHT_BLUE);

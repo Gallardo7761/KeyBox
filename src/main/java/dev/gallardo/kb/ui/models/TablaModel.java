@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TablaModel extends AbstractTableModel {
-    private List<PasswordEntry> passwordEntries = KBDBAccessor.fetchDataFromDB();
+    private final KBDBAccessor kbdbAccessor = KBDBAccessor.getInstance();
+    private List<PasswordEntry> passwordEntries = kbdbAccessor.fetchDataFromDB();
     private final String[] columnNames = {"Título", "Usuario", "Url", "Contraseña"};
 
     public TablaModel() {
         passwordEntries = new ArrayList<>();
-        passwordEntries = KBDBAccessor.fetchDataFromDB();
+        passwordEntries = kbdbAccessor.fetchDataFromDB();
     }
 
     @Override
@@ -31,14 +32,13 @@ public class TablaModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         PasswordEntry entry = passwordEntries.get(rowIndex);
-
-        switch (columnIndex) {
-            case 0: return entry.getTitle();
-            case 1: return entry.getUserName();
-            case 2: return entry.getUrl();
-            case 3: return entry.isPasswordVisible() ? entry.getPassword() : "••••••••";
-            default: return null;
-        }
+        return switch (columnIndex) {
+            case 0 -> entry.getTitle();
+            case 1 -> entry.getUserName();
+            case 2 -> entry.getUrl();
+            case 3 -> entry.isPasswordVisible() ? entry.getPassword() : "••••••••";
+            default -> null;
+        };
     }
 
     @Override
@@ -61,7 +61,7 @@ public class TablaModel extends AbstractTableModel {
 
     public void refreshData() {
         passwordEntries.clear();
-        passwordEntries = KBDBAccessor.fetchDataFromDB();
+        passwordEntries = kbdbAccessor.fetchDataFromDB();
         fireTableDataChanged();
     }
 }
