@@ -4,6 +4,9 @@ import dev.gallardo.kb.ui.UIKeyBox;
 import dev.gallardo.kb.ui.themes.KBLaf;
 import dev.gallardo.kb.util.Constants;
 import dev.gallardo.kb.util.DBUtil;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
+import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.io.File;
@@ -11,6 +14,8 @@ import java.io.File;
 public class KeyBox {
     public static void main(String[] args) {
         handleFiles();
+        IconFontSwing.register(FontAwesome.getIconFont());
+        IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
         initUI();
     }
 

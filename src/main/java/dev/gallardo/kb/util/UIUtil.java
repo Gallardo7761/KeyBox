@@ -5,6 +5,7 @@ import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class UIUtil {
     public static void setTitle(String title, JFrame frame) {
@@ -22,5 +23,20 @@ public class UIUtil {
 
     public static void showInfoDialog(String s) {
         JOptionPane.showMessageDialog(null, s, "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void showErrorDialog(List<String> errorMessages) {
+        StringBuilder sb = new StringBuilder();
+        for (String errorMessage : errorMessages) {
+            sb.append(errorMessage).append("\n");
+        }
+        JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showErrorDialog(List<String> errorMessages, boolean withSound) {
+        if (withSound) {
+            Toolkit.getDefaultToolkit().beep();
+        }
+        showErrorDialog(errorMessages);
     }
 }

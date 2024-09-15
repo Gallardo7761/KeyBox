@@ -68,12 +68,11 @@ public class PasswordForm extends JDialog {
         urlLabel = new JLabel();
         urlField = new JTextField();
         passwordLabel = new JLabel();
-        passwordField = new JTextField();
+        passwordField = new JPasswordField();
         okBtn = new JButton();
 
         //======== this ========
         setResizable(false);
-        setTitle("Nuevo");
         setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
         var contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
@@ -151,7 +150,7 @@ public class PasswordForm extends JDialog {
     private JLabel urlLabel;
     private JTextField urlField;
     private JLabel passwordLabel;
-    private JTextField passwordField;
+    private JPasswordField passwordField;
     private JButton okBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

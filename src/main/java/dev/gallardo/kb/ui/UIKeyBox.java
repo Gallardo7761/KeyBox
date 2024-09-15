@@ -21,6 +21,7 @@ import dev.gallardo.kb.ui.models.TablaModel;
 import dev.gallardo.kb.ui.themes.KBLaf;
 import dev.gallardo.kb.util.Constants;
 import dev.gallardo.kb.util.UIUtil;
+import dev.gallardo.kb.validators.PasswordEntryValidator;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import jiconfont.swing.IconFontSwing;
@@ -43,10 +44,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         contextMenu = ContextMenu.getInstance();
         addContextMenuListeners();
 
-        IconFontSwing.register(FontAwesome.getIconFont());
-        IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
         setIcons();
-
         setupShortcuts();
     }
 
@@ -63,7 +61,12 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
 
         PasswordEntry passwordEntry = passwordForm.getPasswordEntry();
         if (passwordEntry != null) {
-            kbdbAccessor.create(passwordEntry);
+            PasswordEntryValidator validator = new PasswordEntryValidator(passwordEntry);
+            if (validator.validate()) {
+                kbdbAccessor.create(passwordEntry);
+            } else {
+                UIUtil.showErrorDialog(validator.getErrorMessages(), true);
+            }
         }
     }
 
@@ -128,7 +131,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         }
 
         PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
-        UIUtil.showInfoDialog("Contraseña: " + passwordEntry.getPassword());
+        UIUtil.showInfoDialog(passwordEntry.getPassword());
     }
 
     @Override

@@ -1,6 +1,8 @@
 package dev.gallardo.kb.ui.themes;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +25,9 @@ public class KBLaf extends FlatMoonlightIJTheme {
         UIManager.put("TableHeader.font", TABLE_HEADER_FONT);
         UIManager.put("Table.font", TABLE_FONT);
         UIManager.put("Table.rowHeight", 32);
+
+        UIManager.put("PasswordField.showRevealButton", true);
+        UIManager.put("PasswordField.revealButton", IconFontSwing.buildIcon(FontAwesome.EYE, 16, LIGHT_BLUE));
         return setup(new KBLaf());
     }
 
