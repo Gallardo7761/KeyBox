@@ -59,6 +59,19 @@ public class PasswordForm extends JDialog {
         return accepted ? passwordEntry : null;
     }
 
+    private void thisWindowClosed(WindowEvent e) {
+        if (!accepted) {
+            passwordEntry = null;
+        }
+    }
+
+    private void thisWindowClosing(WindowEvent e) {
+        if (!accepted) {
+            passwordEntry = null;
+        }
+
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Educational license - José Manuel Amador Gallardo (José Manuel Amador)
@@ -75,6 +88,16 @@ public class PasswordForm extends JDialog {
         //======== this ========
         setResizable(false);
         setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                thisWindowClosed(e);
+            }
+            @Override
+            public void windowClosing(WindowEvent e) {
+                thisWindowClosing(e);
+            }
+        });
         var contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
             "filly,hidemode 3,gapy 18",

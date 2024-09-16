@@ -95,7 +95,9 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
         try {
             String encryptedPassword = passwordEntry.getPassword();
+            System.out.println("Texto cifrado para mostrar: " + encryptedPassword);
             String decryptedPassword = encryptionService.decryptPassword(encryptedPassword);
+            System.out.println("Contraseña desencriptada: " + decryptedPassword);
             passwordEntry.setPassword(decryptedPassword);
         } catch (Exception ex) {
             UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
@@ -127,6 +129,19 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         }
     }
 
+    private void deleteBtn(ActionEvent e) {
+        int[] selectedRows = tabla.getSelectedRows();
+        if (selectedRows.length == 0) return;
+
+        List<PasswordEntry> passwordEntries = Arrays.stream(selectedRows)
+                .mapToObj(tablaModel::getPasswordEntryAt)
+                .toList();
+
+        if (UIUtil.showConfirmDialog("¿Estás seguro de que deseas eliminar esta/s entrada/s?")) {
+            passwordEntries.forEach(kbdbAccessor::delete);
+        }
+    }
+
     private void showPassword() {
         int selectedRow = tabla.getSelectedRow();
         if (selectedRow == -1) return;
@@ -144,28 +159,17 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         }
     }
 
-
-    private void deleteBtn(ActionEvent e) {
-        int[] selectedRows = tabla.getSelectedRows();
-        if (selectedRows.length == 0) return;
-
-        List<PasswordEntry> passwordEntries = Arrays.stream(selectedRows)
-                .mapToObj(tablaModel::getPasswordEntryAt)
-                .toList();
-
-        if (UIUtil.showConfirmDialog("¿Estás seguro de que deseas eliminar esta/s entrada/s?")) {
-            passwordEntries.forEach(kbdbAccessor::delete);
-        }
-    }
-
     private void copyPassword() {
         int selectedRow = tabla.getSelectedRow();
         if (selectedRow == -1) return;
 
         PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
         try {
-            passwordEntry.setPassword(encryptionService.decryptPassword(passwordEntry.getPassword()));
-            StringSelection stringSelection = new StringSelection(passwordEntry.getPassword());
+            String encryptedPassword = passwordEntry.getPassword();
+            System.out.println("Texto cifrado para mostrar: " + encryptedPassword);
+            String decryptedPassword = encryptionService.decryptPassword(encryptedPassword);
+            System.out.println("Contraseña desencriptada: " + decryptedPassword);
+            StringSelection stringSelection = new StringSelection(decryptedPassword);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
         } catch (Exception ex) {
             UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);

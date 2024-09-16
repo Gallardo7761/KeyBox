@@ -1,0 +1,81 @@
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.11" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets 0,hidemode 3,gapy 0"
+			"$columnConstraints": "[fill,grow]"
+			"$rowConstraints": "[grow,fill]"
+		} ) {
+			name: "this"
+			"$sizePolicy": 1
+			"defaultCloseOperation": 3
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/keybox_icon_64.png" )
+			"foreground": new java.awt.Color( 200, 211, 245, 255 )
+			"preferredSize": new java.awt.Dimension( 900, 600 )
+			"minimumSize": new java.awt.Dimension( 600, 300 )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "tablaScrollPane"
+				"focusable": false
+				"border": &EmptyBorder0 new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tablaScrollPaneMouseClicked", true ) )
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "tabla"
+					"focusable": false
+					"font": new java.awt.Font( "Segoe UI", 0, 16 )
+					"border": #EmptyBorder0
+					auxiliary() {
+						"JavaCodeGenerator.customCreateCode": "new JTable(tablaModel);"
+					}
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tablaMouseClicked", true ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0,gapy 0"
+			} )
+			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "menuBar"
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "createBtn"
+					"text": "Nuevo"
+					"font": &Font0 new java.awt.Font( "Segoe UI", 0, 14 )
+					"border": &EmptyBorder1 new javax.swing.border.EmptyBorder( 1, 1, 1, 1 )
+					"background": &Color0 new java.awt.Color( 34, 36, 54, 255 )
+					"toolTipText": "Ctrl + N"
+					"maximumSize": new java.awt.Dimension( 64, 24 )
+					"minimumSize": new java.awt.Dimension( 64, 24 )
+					"preferredSize": new java.awt.Dimension( 64, 24 )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "createBtn", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "editBtn"
+					"text": "Editar"
+					"font": #Font0
+					"border": #EmptyBorder1
+					"background": #Color0
+					"toolTipText": "Ctrl + E"
+					"maximumSize": new java.awt.Dimension( 64, 24 )
+					"minimumSize": new java.awt.Dimension( 64, 24 )
+					"preferredSize": new java.awt.Dimension( 64, 24 )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "editBtn", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "deleteBtn"
+					"text": "Eliminar"
+					"font": #Font0
+					"border": #EmptyBorder1
+					"background": #Color0
+					"toolTipText": "Ctrl + D"
+					"maximumSize": new java.awt.Dimension( 72, 24 )
+					"minimumSize": new java.awt.Dimension( 72, 24 )
+					"preferredSize": new java.awt.Dimension( 72, 24 )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deleteBtn", true ) )
+				} )
+			}
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 900, 600 )
+		} )
+	}
+}
