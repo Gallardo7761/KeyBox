@@ -67,6 +67,17 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         }
     }
 
+    private String getDecryptedPassword(PasswordEntry passwordEntry) {
+        try {
+            String encryptedPassword = passwordEntry.getPassword();
+            return encryptionService.decryptPassword(encryptedPassword);
+        } catch (Exception ex) {
+            UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
+            Constants.LOGGER.error("Error al descifrar la contraseña.", ex);
+            return null;
+        }
+    }
+
     private void createBtn(ActionEvent e) {
         PasswordForm passwordForm = new PasswordForm(this);
         passwordForm.setVisible(true);
@@ -93,35 +104,38 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         if (selectedRow == -1) return;
 
         PasswordEntry passwordEntry = tablaModel.getPasswordEntryAt(selectedRow);
+        PasswordEntry clonedPasswordEntry = new PasswordEntry(passwordEntry);
         try {
             String encryptedPassword = passwordEntry.getPassword();
             System.out.println("Texto cifrado para mostrar: " + encryptedPassword);
-            String decryptedPassword = encryptionService.decryptPassword(encryptedPassword);
+            String decryptedPassword = getDecryptedPassword(passwordEntry);
             System.out.println("Contraseña desencriptada: " + decryptedPassword);
-            passwordEntry.setPassword(decryptedPassword);
+            clonedPasswordEntry.setPassword(decryptedPassword);
         } catch (Exception ex) {
             UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
             return;
         }
 
-        PasswordForm passwordForm = new PasswordForm(this, passwordEntry);
+        PasswordForm passwordForm = new PasswordForm(this, clonedPasswordEntry);
         passwordForm.setVisible(true);
         PasswordEntry editedPasswordEntry = passwordForm.getPasswordEntry();
 
         if (editedPasswordEntry != null) {
-            PasswordEntryValidator validator = new PasswordEntryValidator(passwordEntry);
+            PasswordEntryValidator validator = new PasswordEntryValidator(editedPasswordEntry);
             if (!validator.validate()) {
                 UIUtil.showErrorDialog(validator.getErrorMessages(), true);
                 return;
             }
             editedPasswordEntry.setPasswordId(passwordEntry.getPasswordId());
             try {
-                String encryptedEditedPassword = encryptionService.encryptPassword(editedPasswordEntry.getPassword());
-                editedPasswordEntry.setPassword(encryptedEditedPassword);
-                if(editedPasswordEntry.equals(passwordEntry)) {
+                Constants.LOGGER.info(editedPasswordEntry.toString());
+                Constants.LOGGER.info(clonedPasswordEntry.toString());
+                if(editedPasswordEntry.equals(clonedPasswordEntry)) {
                     Constants.LOGGER.info("No se realizaron cambios en la entrada.");
                     return;
                 }
+                String encryptedEditedPassword = encryptionService.encryptPassword(editedPasswordEntry.getPassword());
+                editedPasswordEntry.setPassword(encryptedEditedPassword);
                 kbdbAccessor.edit(editedPasswordEntry);
             } catch (Exception ex) {
                 UIUtil.showErrorDialog("Error al cifrar la contraseña.", true);
@@ -150,7 +164,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         try {
             String encryptedPassword = passwordEntry.getPassword();
             System.out.println("Texto cifrado para mostrar: " + encryptedPassword);
-            String decryptedPassword = encryptionService.decryptPassword(encryptedPassword);
+            String decryptedPassword = getDecryptedPassword(passwordEntry);
             System.out.println("Contraseña desencriptada: " + decryptedPassword);
             UIUtil.showInfoDialog(decryptedPassword);
         } catch (Exception ex) {
@@ -167,7 +181,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         try {
             String encryptedPassword = passwordEntry.getPassword();
             System.out.println("Texto cifrado para mostrar: " + encryptedPassword);
-            String decryptedPassword = encryptionService.decryptPassword(encryptedPassword);
+            String decryptedPassword = getDecryptedPassword(passwordEntry);
             System.out.println("Contraseña desencriptada: " + decryptedPassword);
             StringSelection stringSelection = new StringSelection(decryptedPassword);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);

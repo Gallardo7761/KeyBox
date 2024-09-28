@@ -92,6 +92,7 @@ public class PasswordForm extends JDialog {
             @Override
             public void windowClosed(WindowEvent e) {
                 thisWindowClosed(e);
+                thisWindowClosed(e);
             }
             @Override
             public void windowClosing(WindowEvent e) {

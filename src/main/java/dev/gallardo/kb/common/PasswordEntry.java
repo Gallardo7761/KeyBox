@@ -20,6 +20,15 @@ public class PasswordEntry {
         this.passwordVisible = false;  // Por defecto, la contraseña está oculta
     }
 
+    public PasswordEntry(PasswordEntry passwordEntry) {
+        this.passwordId = passwordEntry.getPasswordId();
+        this.title = passwordEntry.getTitle();
+        this.userName = passwordEntry.getUserName();
+        this.url = passwordEntry.getUrl();
+        this.password = passwordEntry.getPassword();
+        this.passwordVisible = passwordEntry.isPasswordVisible();
+    }
+
     public Integer getPasswordId() {
         return passwordId;
     }
