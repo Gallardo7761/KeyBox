@@ -15,7 +15,25 @@ import jiconfont.swing.IconFontSwing;
 import net.miginfocom.swing.*;
 
 /**
- * @author jomaa
+ * Form to create or edit a password entry
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see PasswordEntry
+ * @see JDialog
+ * @see JFrame
+ * @see JLabel
+ * @see JTextField
+ * @see JPasswordField
+ * @see JButton
+ * @see IconFontSwing
+ * @see FontAwesome
+ * @see KBLaf
+ * @see MigLayout
+ * @see WindowAdapter
+ * @see WindowEvent
+ * @see Font
+ * @see Dimension
  */
 @SuppressWarnings("ALL")
 public class PasswordForm extends JDialog {

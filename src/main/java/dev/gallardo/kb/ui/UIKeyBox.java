@@ -26,7 +26,20 @@ import jiconfont.swing.IconFontSwing;
 import net.miginfocom.swing.*;
 
 /**
- * @author jomaa
+ * Main window of the application.
+ * <p>
+ * This class is a singleton, so it can only be instantiated once.
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see KBDBAccessor
+ * @see PasswordEntry
+ * @see TablaModel
+ * @see PasswordForm
+ * @see PasswordEntryValidator
+ * @see PasswordEncryptionService
+ * @see KeyStoreManager
+ * @see UIUtil
  */
 @SuppressWarnings("ALL")
 public class UIKeyBox extends JFrame implements DBChangeListener {

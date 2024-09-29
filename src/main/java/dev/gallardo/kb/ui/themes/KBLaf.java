@@ -7,6 +7,12 @@ import jiconfont.swing.IconFontSwing;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Custom Look and Feel for the KBLaf theme.
+ * This class extends the {@link FlatMoonlightIJTheme} class from FlatLaf.
+ * @author Gallardo7761
+ */
+@SuppressWarnings({"all"})
 public class KBLaf extends FlatMoonlightIJTheme {
     public KBLaf() {}
 

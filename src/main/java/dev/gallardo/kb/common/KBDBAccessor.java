@@ -2,35 +2,72 @@ package dev.gallardo.kb.common;
 
 import dev.gallardo.kb.util.Constants;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is responsible for accessing the database and performing CRUD operations on the Passwords table.
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see PasswordEntry
+ * @see DBChangeListener
+ * @see DriverManager
+ * @see Connection
+ * @see PreparedStatement
+ * @see Statement
+ * @see ResultSet
+ * @see SQLException
+ * @see List
+ */
+@SuppressWarnings({"unused"})
 public class KBDBAccessor {
 
     private KBDBAccessor() {}
 
     private static KBDBAccessor instance = new KBDBAccessor();
 
+    /**
+     * Returns the singleton instance of KBDBAccessor.
+     * @return The singleton instance of KBDBAccessor.
+     */
     public static KBDBAccessor getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new KBDBAccessor();
         }
         return instance;
     }
 
-    private List<DBChangeListener> listeners = new ArrayList<>();
+    private final List<DBChangeListener> listeners = new ArrayList<>();
 
+    /**
+     * Notifies all listeners that the database has changed.
+     */
     private void notifyDBChange() {
-        for(DBChangeListener listener : listeners) {
+        for (DBChangeListener listener : listeners) {
             listener.onDBChanged();
         }
     }
 
+    /**
+     * Adds a listener to the list of listeners.
+     * @param listener The listener to be added.
+     */
     public void addDBChangeListener(DBChangeListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * Gets a PasswordEntry object from the database by its ID.
+     * @param id The ID of the entry to retrieve.
+     * @return A PasswordEntry object with the details of the entry.
+     */
     public PasswordEntry getById(int id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -68,11 +105,10 @@ public class KBDBAccessor {
         return passwordEntry;
     }
 
-    public PasswordEntry[] getAll() {
-        List<PasswordEntry> passwordEntries = fetchDataFromDB();
-        return passwordEntries.toArray(new PasswordEntry[0]);
-    }
-
+    /**
+     * Creates a new password entry in the database.
+     * @param passwordEntry The PasswordEntry object containing the details of the entry to create.
+     */
     public void create(PasswordEntry passwordEntry) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -99,6 +135,10 @@ public class KBDBAccessor {
         notifyDBChange();
     }
 
+    /**
+     * Edits an existing password entry in the database.
+     * @param passwordEntry The PasswordEntry object containing the details of the entry to edit.
+     */
     public void edit(PasswordEntry passwordEntry) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -126,6 +166,10 @@ public class KBDBAccessor {
         notifyDBChange();
     }
 
+    /**
+     * Deletes an entry from the database.
+     * @param passwordEntry The PasswordEntry object containing the details of the entry to delete.
+     */
     public void delete(PasswordEntry passwordEntry) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -136,7 +180,7 @@ public class KBDBAccessor {
             preparedStatement.setInt(1, passwordEntry.getPasswordId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            Constants.LOGGER.error("Error al eliminar datos en la base de datos.", e);
+            Constants.LOGGER.error("Error al eliminar datos de la base de datos.", e);
         } finally {
             try {
                 if (preparedStatement != null) preparedStatement.close();
@@ -149,7 +193,11 @@ public class KBDBAccessor {
         notifyDBChange();
     }
 
-    public List<PasswordEntry> fetchDataFromDB() {
+    /**
+     * Gets all entries from the database.
+     * @return A list of PasswordEntry objects containing the details of all entries in the database.
+     */
+    public List<PasswordEntry> getAll() {
         List<PasswordEntry> passwordEntries = new ArrayList<>();
 
         Connection connection = null;

@@ -12,7 +12,24 @@ import dev.gallardo.kb.util.Constants;
 import net.miginfocom.swing.*;
 
 /**
- * @author jomaa
+ * Dialog to prompt for a password
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see JDialog
+ * @see JLabel
+ * @see JPasswordField
+ * @see JButton
+ * @see MigLayout
+ * @see Font
+ * @see Window
+ * @see ModalityType
+ * @see WindowAdapter
+ * @see WindowEvent
+ * @see BorderLayout
+ * @see Dimension
+ * @see KeyEvent
+ * @see KeyAdapter
  */
 @SuppressWarnings("ALL")
 public class PasswordInput extends JDialog {

@@ -9,7 +9,23 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * @author jomaa
+ * Context menu for the main table.<br>
+ * This class is a singleton.<br>
+ * It contains the following items:<br>
+ * - Create<br>
+ * - Edit<br>
+ * - Delete<br>
+ * - Show<br>
+ * - Copy user<br>
+ * - Copy password<br>
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see JPopupMenu
+ * @see JMenuItem
+ * @see KeyStroke
+ * @see KeyEvent
+ * @see Font
  */
 @SuppressWarnings("ALL")
 public class ContextMenu extends JPopupMenu {

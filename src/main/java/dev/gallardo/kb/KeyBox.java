@@ -16,7 +16,31 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
-
+/**
+ * Entry point of the application.
+ * This class is responsible for initializing the application and handling the first run.
+ * If it's the first run, it will create the necessary files and prompt the user to set a master password.
+ * If it's not the first run, it will prompt the user to enter the master password to access the application.
+ * If the master password is not valid, the application will close.
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see PasswordInput
+ * @see UIKeyBox
+ * @see KBLaf
+ * @see Constants
+ * @see DBUtil
+ * @see EncryptionUtil
+ * @see KeyStoreManager
+ * @see FontAwesome
+ * @see GoogleMaterialDesignIcons
+ * @see IconFontSwing
+ * @see SecretKey
+ * @see JOptionPane
+ * @see File
+ * @see IOException
+ * @see System
+ */
 public class KeyBox {
     public static String masterPassword;
 

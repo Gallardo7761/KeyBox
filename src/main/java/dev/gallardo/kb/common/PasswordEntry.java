@@ -3,6 +3,25 @@ package dev.gallardo.kb.common;
 import javax.swing.*;
 import java.util.StringJoiner;
 
+/**
+ * Class that represents a password entry.
+ * Contains basic information about a password, such as the title, username, URL, and the password itself.
+ * <p>
+ * <strong>Attributes:</strong><br>
+ * - {@code passwordId}: Unique identifier for the password entry.<br>
+ * - {@code title}: Title of the password entry, such as the name of the service.<br>
+ * - {@code userName}: Username associated with the password entry.<br>
+ * - {@code url}: URL of the service or website related to the password entry.<br>
+ * - {@code password}: The password itself.
+ * <p>
+ * <strong>Methods:</strong><br>
+ * - {@code hashCode()}: Generates the hash code of the instance based on the unique identifier.<br>
+ * - {@code equals()}: Compares two instances of {@code PasswordEntry}.<br>
+ * - {@code toString()}: Returns a string representation of the instance.
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ */
 @SuppressWarnings("unused")
 public class PasswordEntry {
     private Integer passwordId;
@@ -19,7 +38,7 @@ public class PasswordEntry {
         this.userName = userName;
         this.url = url;
         this.password = password;
-        this.icon = icon;
+        this.icon = null;
     }
 
     public PasswordEntry(PasswordEntry passwordEntry) {

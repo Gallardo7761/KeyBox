@@ -1,18 +1,42 @@
 package dev.gallardo.kb.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 
 import static dev.gallardo.kb.util.Constants.*;
 
-
+/**
+ * Utility class for database operations.
+ * <p>
+ * This class contains methods to create the database file and setup the database.
+ * <p>
+ * The database file is created in the application directory and the database is created using the default.sql script.
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see Constants
+ * @see java.io.File
+ * @see java.io.IOException
+ * @see java.sql.Connection
+ * @see java.sql.DriverManager
+ * @see java.sql.SQLException
+ * @see java.sql.Statement
+ * @see java.util.Arrays
+ * @see java.io.InputStream
+ * @see java.io.InputStreamReader
+ * @see java.io.BufferedReader
+ */
+@SuppressWarnings({"ResultOfMethodCallIgnored"})
 public class DBUtil {
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+
     public static void createFile() {
         File dbDir = new File(APP_DIR);
         File dbFile = new File(DB_FILE_PATH);
@@ -48,17 +72,18 @@ public class DBUtil {
 
                 String[] sqlCommands = sql.split(";");
                 try (Statement stmt = conn.createStatement()) {
-                    Arrays.stream(sqlCommands)
-                        .map(String::trim)
-                        .filter(trim -> !trim.isEmpty())
-                        .filter(command -> command.startsWith("CREATE TABLE"))
-                        .forEach(command -> {
-                            try{
-                                stmt.execute(command);
-                            } catch (SQLException e) {
-                                LOGGER.error("Error al ejecutar el comando SQL: {}", command, e);
+                    for (String sqlCommand : sqlCommands) {
+                        String trim = sqlCommand.trim();
+                        if (!trim.isEmpty()) {
+                            if (trim.startsWith("CREATE TABLE")) {
+                                try {
+                                    stmt.execute(trim);
+                                } catch (SQLException e) {
+                                    LOGGER.error("Error al ejecutar el comando SQL: {}", trim, e);
+                                }
                             }
-                    });
+                        }
+                    }
                 }
             }
         }

@@ -7,6 +7,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Utility class for UI operations.
+ * <p>
+ * This class provides methods to set the title of a JFrame, set the icon of a JButton, show a confirmation dialog, show an information dialog, and show an error dialog.
+ * <p>
+ * The error dialog can be shown with a beep sound.
+ * <p>
+ * The error dialog can be shown with a list of error messages.
+ * @author Gallardo7761
+ * @version 1.0
+ * @since 1.0
+ * @see jiconfont.swing.IconFontSwing
+ * @see javax.swing.JOptionPane
+ * @see java.awt.Toolkit
+ * @see javax.swing.JFrame
+ * @see javax.swing.JButton
+ * @see java.awt.Color
+ * @see java.util.List
+ * @see jiconfont.IconCode
+ * @see javax.swing.Icon
+ */
+@SuppressWarnings("unused")
 public class UIUtil {
     public static void setTitle(String title, JFrame frame) {
         frame.setTitle(title);
