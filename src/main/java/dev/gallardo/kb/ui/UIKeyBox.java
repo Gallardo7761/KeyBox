@@ -128,8 +128,6 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             }
             editedPasswordEntry.setPasswordId(passwordEntry.getPasswordId());
             try {
-                Constants.LOGGER.info(editedPasswordEntry.toString());
-                Constants.LOGGER.info(clonedPasswordEntry.toString());
                 if(editedPasswordEntry.equals(clonedPasswordEntry)) {
                     Constants.LOGGER.info("No se realizaron cambios en la entrada.");
                     return;
@@ -211,7 +209,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         Action createAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createBtn.doClick(); // Simular clic en el botón "Nuevo"
+                createBtn(e);
             }
         };
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeCreate, "createAction");
@@ -222,7 +220,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         Action editAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                editBtn.doClick();  // Simular clic en el botón "Editar"
+                editBtn(e);
             }
         };
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeEdit, "editAction");
@@ -233,12 +231,46 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         Action deleteAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteBtn.doClick();  // Simular clic en el botón "Eliminar"
+                deleteBtn(e);
             }
         };
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeDelete, "deleteAction");
         getRootPane().getActionMap().put("deleteAction", deleteAction);
+
+        // Shortcut for "Mostrar contraseña" (Ctrl + S)
+        KeyStroke keyStrokeShow = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
+        Action showAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPassword();  // Simular clic en el botón "Mostrar contraseña"
+            }
+        };
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeShow, "showAction");
+        getRootPane().getActionMap().put("showAction", showAction);  // Faltaba añadir esta línea
+
+        // Shortcut for "Copiar usuario" (Ctrl + U)
+        KeyStroke keyStrokeCopyUser = KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK);
+        Action copyUserAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyUser();  // Simular clic en el botón "Copiar usuario"
+            }
+        };
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeCopyUser, "copyUserAction");
+        getRootPane().getActionMap().put("copyUserAction", copyUserAction);  // Faltaba añadir esta línea
+
+        // Shortcut for "Copiar contraseña" (Ctrl + C)
+        KeyStroke keyStrokeCopyPassword = KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK);
+        Action copyPasswordAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyPassword();  // Simular clic en el botón "Copiar contraseña"
+            }
+        };
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeCopyPassword, "copyPasswordAction");
+        getRootPane().getActionMap().put("copyPasswordAction", copyPasswordAction);  // Faltaba añadir esta línea
     }
+
 
     private void setIcons() {
         createBtn.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 16, KBLaf.LIGHT_BLUE));

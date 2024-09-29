@@ -1,5 +1,6 @@
 package dev.gallardo.kb.common;
 
+import javax.swing.*;
 import java.util.StringJoiner;
 
 @SuppressWarnings("unused")
@@ -9,15 +10,16 @@ public class PasswordEntry {
     private String userName;
     private String url;
     private String password;
-    private boolean passwordVisible;
+    private ImageIcon icon;
 
-    public PasswordEntry(Integer passwordId, String title, String userName, String url, String password) {
+    public PasswordEntry(Integer passwordId, String title,
+            String userName, String url, String password) {
         this.passwordId = passwordId;
         this.title = title;
         this.userName = userName;
         this.url = url;
         this.password = password;
-        this.passwordVisible = false;  // Por defecto, la contraseña está oculta
+        this.icon = icon;
     }
 
     public PasswordEntry(PasswordEntry passwordEntry) {
@@ -26,7 +28,7 @@ public class PasswordEntry {
         this.userName = passwordEntry.getUserName();
         this.url = passwordEntry.getUrl();
         this.password = passwordEntry.getPassword();
-        this.passwordVisible = passwordEntry.isPasswordVisible();
+        this.icon = passwordEntry.getIcon();
     }
 
     public Integer getPasswordId() {
@@ -69,12 +71,12 @@ public class PasswordEntry {
         this.password = password;
     }
 
-    public boolean isPasswordVisible() {
-        return passwordVisible;
+    public ImageIcon getIcon() {
+        return icon;
     }
 
-    public void setPasswordVisible(boolean passwordVisible) {
-        this.passwordVisible = passwordVisible;
+    public void setIcon(ImageIcon icon) {
+        this.icon = icon;
     }
 
     @Override
@@ -83,7 +85,11 @@ public class PasswordEntry {
         if (o == null || getClass() != o.getClass()) return false;
 
         PasswordEntry that = (PasswordEntry) o;
-        return passwordId.equals(that.passwordId) && title.equals(that.title) && userName.equals(that.userName) && url.equals(that.url) && password.equals(that.password);
+        return passwordId.equals(that.passwordId) &&
+                title.equals(that.title) &&
+                userName.equals(that.userName) &&
+                url.equals(that.url) &&
+                password.equals(that.password);
     }
 
     @Override
@@ -104,7 +110,7 @@ public class PasswordEntry {
                 .add("userName='" + userName + "'")
                 .add("website='" + url + "'")
                 .add("password='" + password + "'")
-                .add("passwordVisible=" + passwordVisible)
+                .add("icon='" + icon + "'")
                 .toString();
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class TablaModel extends AbstractTableModel {
     private final KBDBAccessor kbdbAccessor = KBDBAccessor.getInstance();
     private List<PasswordEntry> passwordEntries = kbdbAccessor.fetchDataFromDB();
-    private final String[] columnNames = {"Título", "Usuario", "Url", "Contraseña"};
+    private final String[] columnNames = {"Título", "Usuario", "Url"};
 
     public TablaModel() {
         passwordEntries = new ArrayList<>();
@@ -36,7 +36,6 @@ public class TablaModel extends AbstractTableModel {
             case 0 -> entry.getTitle();
             case 1 -> entry.getUserName();
             case 2 -> entry.getUrl();
-            case 3 -> entry.isPasswordVisible() ? entry.getPassword() : "••••••••";
             default -> null;
         };
     }
@@ -45,7 +44,6 @@ public class TablaModel extends AbstractTableModel {
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
         PasswordEntry entry = passwordEntries.get(rowIndex);
         if (columnIndex == 4) {
-            entry.setPasswordVisible(!entry.isPasswordVisible());
             fireTableCellUpdated(rowIndex, columnIndex);
         }
     }
