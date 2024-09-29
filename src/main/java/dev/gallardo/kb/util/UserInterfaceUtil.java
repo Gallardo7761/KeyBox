@@ -29,7 +29,7 @@ import java.util.List;
  * @see javax.swing.Icon
  */
 @SuppressWarnings("unused")
-public class UIUtil {
+public class UserInterfaceUtil {
     public static void setTitle(String title, JFrame frame) {
         frame.setTitle(title);
     }

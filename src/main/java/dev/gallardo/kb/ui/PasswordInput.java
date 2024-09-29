@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import dev.gallardo.kb.util.Constants;
+import dev.gallardo.kb.common.Constants;
 import net.miginfocom.swing.*;
 
 /**

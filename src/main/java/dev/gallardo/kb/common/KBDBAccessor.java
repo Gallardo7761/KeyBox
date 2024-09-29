@@ -1,7 +1,5 @@
 package dev.gallardo.kb.common;
 
-import dev.gallardo.kb.util.Constants;
-
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -14,9 +14,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import dev.gallardo.kb.KeyBox;
-import dev.gallardo.kb.common.DBChangeListener;
-import dev.gallardo.kb.common.KBDBAccessor;
-import dev.gallardo.kb.common.PasswordEntry;
+import dev.gallardo.kb.common.*;
 import dev.gallardo.kb.ui.models.TablaModel;
 import dev.gallardo.kb.ui.themes.KBLaf;
 import dev.gallardo.kb.util.*;
@@ -37,9 +35,9 @@ import net.miginfocom.swing.*;
  * @see TablaModel
  * @see PasswordForm
  * @see PasswordEntryValidator
- * @see PasswordEncryptionService
+ * @see PasswordEncryptionUtil
  * @see KeyStoreManager
- * @see UIUtil
+ * @see UserInterfaceUtil
  */
 @SuppressWarnings("ALL")
 public class UIKeyBox extends JFrame implements DBChangeListener {
@@ -47,13 +45,13 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
     private final TablaModel tablaModel = new TablaModel();
     private final KBDBAccessor kbdbAccessor = KBDBAccessor.getInstance();
     private final ContextMenu contextMenu;
-    private final PasswordEncryptionService encryptionService;
+    private final PasswordEncryptionUtil encryptionService;
 
     private UIKeyBox() {
         initComponents();
         kbdbAccessor.addDBChangeListener(this);
 
-        UIUtil.setTitle("KeyBox v" + Constants.APP_VERSION, this);
+        UserInterfaceUtil.setTitle("KeyBox v" + Constants.APP_VERSION, this);
         contextMenu = ContextMenu.getInstance();
         addContextMenuListeners();
 
@@ -61,7 +59,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         setupShortcuts();
 
         SecretKey key = loadSecretKey();
-        encryptionService = new PasswordEncryptionService(key);
+        encryptionService = new PasswordEncryptionUtil(key);
     }
 
     public static UIKeyBox getInstance() {
@@ -85,7 +83,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             String encryptedPassword = passwordEntry.getPassword();
             return encryptionService.decryptPassword(encryptedPassword);
         } catch (Exception ex) {
-            UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
+            UserInterfaceUtil.showErrorDialog("Error al descifrar la contraseña.", true);
             Constants.LOGGER.error("Error al descifrar la contraseña.", ex);
             return null;
         }
@@ -99,7 +97,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         if (passwordEntry != null) {
             PasswordEntryValidator validator = new PasswordEntryValidator(passwordEntry);
             if (!validator.validate()) {
-                UIUtil.showErrorDialog(validator.getErrorMessages(), true);
+                UserInterfaceUtil.showErrorDialog(validator.getErrorMessages(), true);
                 return;
             }
 
@@ -107,7 +105,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
                 passwordEntry.setPassword(encryptionService.encryptPassword(passwordEntry.getPassword()));
                 kbdbAccessor.create(passwordEntry);
             } catch (Exception ex) {
-                UIUtil.showErrorDialog("Error al cifrar la contraseña.", true);
+                UserInterfaceUtil.showErrorDialog("Error al cifrar la contraseña.", true);
             }
         }
     }
@@ -125,7 +123,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             System.out.println("Contraseña desencriptada: " + decryptedPassword);
             clonedPasswordEntry.setPassword(decryptedPassword);
         } catch (Exception ex) {
-            UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
+            UserInterfaceUtil.showErrorDialog("Error al descifrar la contraseña.", true);
             return;
         }
 
@@ -136,7 +134,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
         if (editedPasswordEntry != null) {
             PasswordEntryValidator validator = new PasswordEntryValidator(editedPasswordEntry);
             if (!validator.validate()) {
-                UIUtil.showErrorDialog(validator.getErrorMessages(), true);
+                UserInterfaceUtil.showErrorDialog(validator.getErrorMessages(), true);
                 return;
             }
             editedPasswordEntry.setPasswordId(passwordEntry.getPasswordId());
@@ -149,7 +147,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
                 editedPasswordEntry.setPassword(encryptedEditedPassword);
                 kbdbAccessor.edit(editedPasswordEntry);
             } catch (Exception ex) {
-                UIUtil.showErrorDialog("Error al cifrar la contraseña.", true);
+                UserInterfaceUtil.showErrorDialog("Error al cifrar la contraseña.", true);
             }
         }
     }
@@ -162,7 +160,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
                 .mapToObj(tablaModel::getPasswordEntryAt)
                 .toList();
 
-        if (UIUtil.showConfirmDialog("¿Estás seguro de que deseas eliminar esta/s entrada/s?")) {
+        if (UserInterfaceUtil.showConfirmDialog("¿Estás seguro de que deseas eliminar esta/s entrada/s?")) {
             passwordEntries.forEach(kbdbAccessor::delete);
         }
     }
@@ -177,9 +175,9 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             System.out.println("Texto cifrado para mostrar: " + encryptedPassword);
             String decryptedPassword = getDecryptedPassword(passwordEntry);
             System.out.println("Contraseña desencriptada: " + decryptedPassword);
-            UIUtil.showInfoDialog(decryptedPassword);
+            UserInterfaceUtil.showInfoDialog(decryptedPassword);
         } catch (Exception ex) {
-            UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
+            UserInterfaceUtil.showErrorDialog("Error al descifrar la contraseña.", true);
             Constants.LOGGER.error("Error al descifrar la contraseña.", ex);
         }
     }
@@ -197,7 +195,7 @@ public class UIKeyBox extends JFrame implements DBChangeListener {
             StringSelection stringSelection = new StringSelection(decryptedPassword);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
         } catch (Exception ex) {
-            UIUtil.showErrorDialog("Error al descifrar la contraseña.", true);
+            UserInterfaceUtil.showErrorDialog("Error al descifrar la contraseña.", true);
         }
     }
 

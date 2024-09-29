@@ -1,5 +1,7 @@
 package dev.gallardo.kb.util;
 
+import dev.gallardo.kb.common.Constants;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static dev.gallardo.kb.util.Constants.*;
+import static dev.gallardo.kb.common.Constants.*;
 
 /**
  * Utility class for database operations.
@@ -34,7 +36,7 @@ import static dev.gallardo.kb.util.Constants.*;
  * @see java.io.BufferedReader
  */
 @SuppressWarnings({"ResultOfMethodCallIgnored"})
-public class DBUtil {
+public class DatabaseUtil {
 
 
     public static void createFile() {
@@ -59,7 +61,7 @@ public class DBUtil {
     }
 
     private static void defaultSQLScript(Connection conn) throws IOException, java.sql.SQLException {
-        try (InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream("default.sql")) {
+        try (InputStream inputStream = DatabaseUtil.class.getClassLoader().getResourceAsStream("default.sql")) {
 
             assert inputStream != null;
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {

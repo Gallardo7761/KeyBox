@@ -3,10 +3,10 @@ package dev.gallardo.kb;
 import dev.gallardo.kb.ui.PasswordInput;
 import dev.gallardo.kb.ui.UIKeyBox;
 import dev.gallardo.kb.ui.themes.KBLaf;
-import dev.gallardo.kb.util.Constants;
-import dev.gallardo.kb.util.DBUtil;
+import dev.gallardo.kb.common.Constants;
+import dev.gallardo.kb.util.DatabaseUtil;
 import dev.gallardo.kb.util.EncryptionUtil;
-import dev.gallardo.kb.util.KeyStoreManager;
+import dev.gallardo.kb.common.KeyStoreManager;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import jiconfont.swing.IconFontSwing;
@@ -29,7 +29,7 @@ import java.io.IOException;
  * @see UIKeyBox
  * @see KBLaf
  * @see Constants
- * @see DBUtil
+ * @see DatabaseUtil
  * @see EncryptionUtil
  * @see KeyStoreManager
  * @see FontAwesome
@@ -100,8 +100,8 @@ public class KeyBox {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void handleFiles() {
         if(!new File(Constants.DB_FILE_PATH).exists()) {
-            DBUtil.createFile();
-            DBUtil.setup();
+            DatabaseUtil.createFile();
+            DatabaseUtil.setup();
             Constants.LOGGER.info("Base de datos creada e inicializada con éxito.");
         } else {
             Constants.LOGGER.info("Se ha encontrado una base de datos.");
